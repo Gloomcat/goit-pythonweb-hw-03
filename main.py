@@ -1,5 +1,6 @@
 import datetime
 import json
+import logging
 import mimetypes
 import pathlib
 import urllib.parse
@@ -9,6 +10,11 @@ from jinja2 import Environment, FileSystemLoader
 
 ENV = Environment(loader=FileSystemLoader('.'))
 
+LOGGER = logging.getLogger("App")
+LOGGER.setLevel(logging.INFO)
+console_handler = logging.StreamHandler()
+console_handler.setLevel(logging.INFO)
+LOGGER.addHandler(console_handler)
 
 class HttpHandler(BaseHTTPRequestHandler):
     def do_GET(self):
@@ -88,7 +94,7 @@ def run(server_class=HTTPServer, handler_class=HttpHandler):
     server_address = ('', 3000)
     http = server_class(server_address, handler_class)
     try:
-        print("Started server at http://127.0.0.1:3000")
+        LOGGER.info("Started server at http://127.0.0.1:3000")
         http.serve_forever()
     except KeyboardInterrupt:
         http.server_close()
